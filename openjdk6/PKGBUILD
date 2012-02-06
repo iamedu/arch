@@ -6,7 +6,7 @@ pkgdesc="OpenJDK 7 with systemtap support"
 url="http://iamedu.wordpress.com"
 arch=('x86_64' 'i686')
 license=('custom')
-provides=('java-runtime=6')
+provides=('java-runtime=6' 'java-environment=6')
 replaces=('openjdk6')
 conflicts=('java-runtime' 'openjdk6')
 depends=('systemtap')
@@ -41,8 +41,12 @@ build() {
 package() {
     cd "${srcdir}/icedtea6-1.11/openjdk.build/j2sdk-image"
     install -m755 -d ${pkgdir}/${_jvmdir}/
+    install -m755 -d ${pkgdir}/usr/local/share/systemtap/tapset
+
+    cp -a tapset/* ${pkgdir}/usr/local/share/systemtap/tapset
 
     cp -ar * ${pkgdir}/${_jvmdir}/
+    rm -rf ${pkgdir}/${_jvmdir}/tapset
    
     pushd ../j2re-image/man
     install -m755 -d ${pkgdir}/usr/share/man/man1/
